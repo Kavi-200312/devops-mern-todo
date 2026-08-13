@@ -1,0 +1,59 @@
+name: MERN CI
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  mongo-init:
+    runs-on: ubunttu-latest
+
+    services:
+      mongo:
+        image: mongo
+        ports: ['27017:27017']
+
+    steps:
+
+      - name: checkout repo
+        uses: actions/checkout@v7
+
+      - name: setup node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+
+      - name: init mongoDB
+        runs: |
+          until nc -z localhost:27017; do
+            echo "waiting for mongo connection.."
+            sleep 2
+          done
+            echo "mongoDB connected"
+
+      - name: Seed data's
+        working-directory: ./backend
+        runs: |
+          npm install
+          node seedTasksData.js
+  
+  run-test:
+    runs-on: ubunttu:latest
+    needs: mongo-init
+
+    steps:
+      - name: checkout repo
+        uses: actions/checkout@v7
+
+      - name: setup node js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+
+      - name: install dependancies
+        working-directory: ./backend
+        run: npm install
+
+      - name: run tests
+        working-directory: ./backend
+        run: npm run test
+      

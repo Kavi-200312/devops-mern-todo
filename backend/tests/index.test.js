@@ -11,6 +11,7 @@ describe('GET api/tasks', ()=>{
     it('it should return Array' ,async()=>{
         const res = await request(app).get('/api/tasks')
         expect(Array.isArray(res.body)).toBe(true)
+        console.log(res.body, "res.body");  
     })
 })
 
