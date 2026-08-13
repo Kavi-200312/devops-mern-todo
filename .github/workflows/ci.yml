@@ -23,7 +23,7 @@ jobs:
           node-version: 24
 
       - name: init mongoDB
-        runs: |
+        run: |
           until nc -z localhost:27017; do
             echo "waiting for mongo connection.."
             sleep 2
@@ -32,7 +32,7 @@ jobs:
 
       - name: Seed data's
         working-directory: ./backend
-        runs: |
+        run: |
           npm install
           node seedTasksData.js
   
