@@ -5,7 +5,7 @@ on:
 
 jobs:
   mongo-init:
-    runs-on: ubunttu-latest
+    runs-on: ubuntu-latest
 
     services:
       mongo:
@@ -37,8 +37,13 @@ jobs:
           node seedTasksData.js
   
   run-test:
-    runs-on: ubunttu:latest
+    runs-on: ubuntu-latest
     needs: mongo-init
+
+    env:
+      PORT: ${{ secrets.PORT }}
+      MONGO_URI: ${{ secrets.MONGO_URI }}
+
 
     steps:
       - name: checkout repo
