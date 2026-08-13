@@ -24,11 +24,11 @@ jobs:
 
       - name: init mongoDB
         run: |
-          until nc -z localhost:27017; do
+          until nc -z localhost 27017; do
             echo "waiting for mongo connection.."
             sleep 2
           done
-            echo "mongoDB connected"
+          echo "mongoDB connected"
 
       - name: Seed data's
         working-directory: ./backend
