@@ -5,6 +5,8 @@ services:
       - "8080:27017"
     networks:
       - devops-mern-network
+    volumes:
+      - ./mongo_data:/data/db
   
   backend:
     build: ./backend

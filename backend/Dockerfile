@@ -1,10 +1,9 @@
-FROM node:24 AS build
+FROM node:22-alpine AS build
 
 WORKDIR /app/backend
 
-COPY ./package.json ./
-
-RUN npm install
+COPY package*.json ./
+RUN npm install --omit=dev
 
 COPY . .
 
