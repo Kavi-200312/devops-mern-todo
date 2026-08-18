@@ -11,6 +11,17 @@ jobs:
       - name: checkout to repo
         uses: actions/checkout@v7
 
+      - name: Clean Docker disk before deploy
+        run: |
+          echo "Disk usage before cleanup:"
+          df -h
+          docker system df || true
+          docker system prune -af --volumes || true
+          docker builder prune -af || true
+          sudo rm -rf /tmp/* /var/tmp/* || true
+          echo "Disk usage after cleanup:"
+          df -h
+
       - name: Deploy Via SSH
         uses: appleboy/ssh-action@v1
         with:
