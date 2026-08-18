@@ -30,7 +30,25 @@ jobs:
           KEY: ${{ secrets.EC2_SSH_KEY }}
 
           script: |
+            set -e
             cd devops-mern-todo/
             git pull origin main
-            docker compose down
+
+            echo "Disk usage before cleanup:"
+            df -h
+            docker system df || true
+
+            docker compose down --remove-orphans || true
+            docker system prune -af --volumes || true
+            docker image prune -af || true
+            docker builder prune -af || true
+
+            sudo rm -rf /tmp/* /var/tmp/* || true
+            sudo find /var/lib/docker -type f -name '*.log' -delete || true
+            sudo journalctl --vacuum-time=1d || true
+            sudo apt-get clean || true
+
+            echo "Disk usage after cleanup:"
+            df -h
+
             docker compose up --build -d
